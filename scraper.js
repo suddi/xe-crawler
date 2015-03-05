@@ -46,10 +46,10 @@ ExchangeScraper.prototype.getRate = function(payload, callback) {
                                 .toString();
 
                             if (!isNaN(rate)) {
-                                data.from =         payload.from;
-                                data.to =           payload.to;
-                                data.created_at =   new Date();
-                                data.rate =         rate;
+                                data.from       = payload.from;
+                                data.to         = payload.to;
+                                data.created_at = new Date();
+                                data.rate       = rate;
                             }
                             callback(true, data);
                         }
