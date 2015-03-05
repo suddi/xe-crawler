@@ -2,7 +2,7 @@
 var fivebeans_settings = {
 	host_name:			'challenge.aftership.net',
 	port_address:		11300,
-	tube:				'newtest',
+	tube:				'suddi',
 };
 
 
