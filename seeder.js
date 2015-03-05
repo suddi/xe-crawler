@@ -1,7 +1,7 @@
-var BeanstalkdClient = require('./client'),
-	queue = require('./settings').queue_settings,
-	payloads = require('./settings').payload_settings,
-	printer = require('./printer');
+var BeanstalkdClient 	= require('./client'),
+	queue 				= require('./settings').queue_settings,
+	payloads 			= require('./settings').payload_settings,
+	printer 			= require('./printer');
 
 
 var client = new BeanstalkdClient();
@@ -22,7 +22,7 @@ function onceUsed() {
 
 function onceProduced() {
 	counter++;
-	if (counter == num_payloads)
+	if (counter === num_payloads)
 		client.endClient();
 }
 
