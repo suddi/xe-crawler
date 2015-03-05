@@ -1,6 +1,7 @@
 # Documentation #
 
 This program was developed on and for `Node.js 0.10.25` on `Ubuntu 14.04 LTS 64 bit`.
+
 The program stores key-value pairs in `Redis`, for this you will need to install `redis-server`.
 
 ---
@@ -49,7 +50,7 @@ If this happens, some jobs may be left behind in the tube, to remove these we ca
 	$ node destroy.js
 
 ---
-### Remove Program-Relevant Key-Value Pairs ###
+### Remove Program Relevant Key-Value Pairs ###
 ---
 
 In the scenario that a program is stopped mid-run, it may be necessary to remove program relevant key-value pairs from redis.
