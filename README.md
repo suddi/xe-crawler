@@ -2,8 +2,6 @@
 
 This program was developed on and for `Node.js 0.10.25` on `Ubuntu 14.04 LTS 64 bit`.
 
-The program stores key-value pairs in `Redis`, for this you will need to install `redis-server`.
-
 ---
 ### Installation ###
 ---
@@ -48,12 +46,3 @@ Currently, if the beanstalkd client reports an error, the program will shut down
 If this happens, some jobs may be left behind in the tube, to remove these we can run:
 
 	$ node destroy.js
-
----
-### Remove Program Relevant Key-Value Pairs ###
----
-
-In the scenario that a program is stopped mid-run, it may be necessary to remove program relevant key-value pairs from redis.
-To do this:
-
-	$ node clear_redis.js

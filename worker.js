@@ -1,7 +1,10 @@
-var BeanstalkdClient    = require('./client'),
+var exit                = require('process').exit,
+
+    BeanstalkdClient    = require('./client'),
     Counter             = require('./counter'),
     ExchangeScraper     = require('./scraper'),
     MongoHandler        = require('./db'),
+    general             = require('./settings').general_settings,
     queue               = require('./settings').queue_settings,
     printer             = require('./printer');
 
@@ -16,6 +19,11 @@ var fail_counter = {};
 
 
 function onceConnected() {
+    client.useTube();
+}
+
+
+function onceUsed() {
     mongo.establishConnection(function() {
         client.watchTube();
     });
@@ -23,23 +31,28 @@ function onceConnected() {
 
 
 function onceWatched() {
-    client.consumeJob(function(jobid, payload) {
-        printer('Performing jobid: ' + jobid + ' with payload: ' + payload);
+    client.peekJob(function(is_available) {
+        if (is_available) {
+            client.consumeJob(function(jobid, payload) {
+                payload = JSON.parse(payload);
 
-        count.contains(payload, function(does_contain) {
-            if (!does_contain) {
+                printer('Performing jobid: ' + jobid + ' with payload: ' +
+                    payload.from + ' => ' + payload.to);
                 count.initCounter(payload);
-            }
-        });
 
-        var parsed_payload = JSON.parse(payload);
-        scraper.getRate(parsed_payload, function(is_success, rate) {
-            count.getSuccess(payload, is_success, function(is_save) {
-                if (is_save)
-                    mongo.saveRecord(rate);
-                client.destroyJob(jobid, [payload, is_success]);
+                scraper.getRate(payload, function(is_success, rate) {
+                    count.getSuccess(payload, is_success, function(is_save) {
+                        if (is_save)
+                            mongo.saveRecord(rate);
+                        client.destroyJob(jobid, [payload, is_success]);
+                    });
+                });
             });
-        });
+        }
+        else {
+            client.endClient();
+            exit();
+        }
     });
 }
 
@@ -50,35 +63,16 @@ function onceDestroyed(forwarded_value) {
 
     count.increment(payload, is_success, function(is_run) {
         if (is_run) {
-            if (is_success) {
-                printer('10 successful attempts have been made for the ' +
-                    'payload: ' + payload);
-            }
-            else {
-                printer('3 failed attempts have been made for the payload: ' +
-                    payload);
-            }
-
-            count.remove(payload, function(complete) {
-                if (complete) {
-                    printer('All payloads have been run to completion');
-                    mongo.endConnection(function() {
-                        count.endClient();
-                        client.endClient();
-                    });
-                }
-                else {
-                    onceWatched();
-                }
-            });
+            onceWatched();
         }
         else {
+            console.log('\n\n\n');
             var delay = queue.success_delay;
             if (!is_success)
                 delay = queue.fail_delay;
 
             client.produceJob(queue.priority, delay, queue.ttr,
-                [payload.toString()]
+                [payload]
             );
         }
     });
@@ -86,11 +80,7 @@ function onceDestroyed(forwarded_value) {
 
 
 function onceFailed(method) {
-    printer('', 'The BeanstalkdClient method ' + method +
-        'has failed (please check settings.js that the input is accurate ' +
-        'and that you are not experiencing network issues)'
-    );
-    printer('Please run destroy.js to remove jobs built up in the queue');
+    printer('', 'The BeanstalkdClient method ' + method + ' has stopped');
     mongo.endConnection(function() {
         client.endClient();
     });
@@ -100,6 +90,7 @@ function onceFailed(method) {
 client.createClient();
 client
     .on('connected', onceConnected)
+    .on('used', onceUsed)
     .on('watched', onceWatched)
     .on('destroyed', onceDestroyed)
     .on('produced', onceWatched)

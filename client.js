@@ -56,6 +56,28 @@ BeanstalkdClient.prototype.endClient = function() {
 };
 
 
+BeanstalkdClient.prototype.peekJob = function(callback) {
+    var self = this;
+
+    if (self.is_connected) {
+        self.client.peek_ready(function(error, jobid, payload) {
+            if (typeof jobid !== 'undefined')
+                callback(true);
+            else {
+                self.client.peek_delayed(function(error, jobid, payload) {
+                    if (typeof jobid !== 'undefined')
+                        callback(true);
+                    else
+                        callback(false);
+                });
+            }
+        });
+    }
+    else
+        callback(false);
+};
+
+
 BeanstalkdClient.prototype.consumeJob = function(callback) {
     var self = this;
 
@@ -64,7 +86,7 @@ BeanstalkdClient.prototype.consumeJob = function(callback) {
             if (!self.printer('Reserving jobid: ' + jobid, error))
                 callback(jobid, payload);
             else
-                self.emit('failed');
+                self.emit('failed', 'consumeJob');
         });
     }
     else

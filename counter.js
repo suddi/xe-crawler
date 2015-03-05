@@ -1,119 +1,49 @@
 var Counter = function() {
-    this.redis      = require('redis').createClient();
-
     this.printer    = require('./printer');
     this.settings   = require('./settings').general_settings;
-
-
-    this.pre = this.settings.redis_prefix;
-    this.success = '_success_';
-    this.fail = '_fail_';
 };
 
 
 Counter.prototype.initCounter = function(payload) {
-    var self = this;
-
-    var key_success = self.pre + self.success + payload;
-    var key_fail    = self.pre + self.fail + payload;
-    self.redis.set(key_success, 0, function(error) {});
-    self.redis.set(key_fail, 0, function(error) {});
-};
-
-
-Counter.prototype.contains = function(payload, callback) {
-    var self = this;
-
-    var key = self.pre + self.success + payload;
-    self.redis.exists(key, function(error, reply) {
-        callback(reply);
-    });
+    if (!('success' in payload) && !('fail' in payload)) {
+        payload.success = 0;
+        payload.fail    = 0;
+    }
 };
 
 
 Counter.prototype.getSuccess = function(payload, is_success, callback) {
-    if (is_success) {
-        var self = this;
-
-        var key = self.pre + self.success + payload;
-        self.redis.get(key, function(error, reply) {
-            callback(parseInt(reply, 10) < self.settings.success_limit);
-        });
-    }
-    else
-        callback(false);
+    callback(payload.success < this.settings.success_limit);
 };
 
 
 Counter.prototype.increment = function(payload, is_success, callback) {
     var self = this;
 
-    var key = self.pre;
+    var is_run = false;
+    var print_string = ' attempts made for ' + payload.from + ' => ' +
+        payload.to;
     if (is_success) {
-        key += self.success + payload;
-        self.redis.exists(key, function(error, reply) {
-            if (reply) {
-                self.redis.incr(key, function(error, reply) {
-                    var is_run = reply >= self.settings.success_limit;
-                    if (is_run)
-                        reply = self.settings.success_limit;
-                    self.printer(reply + ' successful attempts made for ' +
-                        payload, error);
-                    callback(is_run);
-                });
-            }
-        });
+        payload.success++;
+        is_run = (payload.success === self.settings.success_limit);
+        print_string = payload.success + ' successful' + print_string;
     }
     else {
-        key += self.fail + payload;
-        self.redis.exists(key, function(error, reply) {
-            if (reply) {
-                self.redis.incr(key, function(error, reply) {
-                    var is_run = reply >= self.settings.fail_limit;
-                    if(is_run)
-                        reply = self.settings.fail_limit;
-                    self.printer(reply + ' failed attempts made for ' +
-                        payload, error);
-                    callback(is_run);
-                });
-            }
-        });
+        payload.fail++;
+        is_run = (payload.fail === self.settings.fail_limit);
+        print_string = payload.fail + ' failed' + print_string;
     }
-};
 
-
-Counter.prototype.remove = function(payload, callback) {
-    var self = this;
-
-    var key_success = self.pre + self.success + payload;
-    var key_fail    = self.pre + self.fail + payload;
-    self.redis.del(key_success, function(error, reply) {
-        self.redis.del(key_fail, function(error, reply) {
-            self.redis.keys(self.pre + '*', function(error, key) {
-                callback(!(key.length));
-            });
-        });
-    });
+    self.printer(print_string);
+    callback(is_run);
 };
 
 
 Counter.prototype.printValue = function(payload) {
-    var self = this;
-
-    var key_success = self.pre + self.success + payload;
-    var key_fail    = self.pre + self.fail + payload;
-
-    self.redis.get(key_success, function(error, reply) {
-        self.printer('Number of successes for ' + payload + ' = ' + reply);
-    });
-    self.redis.get(key_fail, function(error, reply) {
-        self.printer('Number of fails for ' + payload + ' = ' + reply);
-    });
-};
-
-
-Counter.prototype.endClient = function() {
-    this.redis.quit();
+    this.printer('Number of successful attempts for ' + payload.from +
+        ' => ' + payload.to + ': ' + payload.success);
+    this.printer('Number of failed attempts for ' + payload.from +
+        ' => ' + payload.to + ': ' + payload.fail);
 };
 
 

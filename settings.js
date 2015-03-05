@@ -34,57 +34,56 @@ var payload_settings = [
         to:         'USD'
     },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'GBP'
-    // },
+    {
+        from:       'HKD',
+        to:         'GBP'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'EUR'
-    // },
+    {
+        from:       'HKD',
+        to:         'EUR'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'AUD'
-    // },
+    {
+        from:       'HKD',
+        to:         'AUD'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'CAD'
-    // },
+    {
+        from:       'HKD',
+        to:         'CAD'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'INR'
-    // },
+    {
+        from:       'HKD',
+        to:         'INR'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'ZAR'
-    // },
+    {
+        from:       'HKD',
+        to:         'ZAR'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'NZD'
-    // },
+    {
+        from:       'HKD',
+        to:         'NZD'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'JPY'
-    // },
+    {
+        from:       'HKD',
+        to:         'JPY'
+    },
 
-    // {
-    //     from:       'HKD',
-    //     to:         'CNY'
-    // },
+    {
+        from:       'HKD',
+        to:         'CNY'
+    },
 ];
 
 
 var general_settings = {
     success_limit:  10,
     fail_limit:     3,
-    redis_prefix:   'xe_rate_',
 };
 
 

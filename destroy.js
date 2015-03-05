@@ -1,4 +1,5 @@
 var BeanstalkdClient    = require('./client'),
+    queue               = require('./settings').queue_settings,
     printer             = require('./printer');
 
 
@@ -6,31 +7,38 @@ var client = new BeanstalkdClient();
 
 
 function onceConnected() {
+    client.useTube();
+}
+
+
+function onceUsed() {
     client.watchTube();
 }
 
 
 function onceWatched() {
-    client.consumeJob(function(jobid, payload) {
-        client.destroyJob(jobid);
+    client.peekJob(function(is_available) {
+        if (is_available) {
+            client.consumeJob(function(jobid, payload) {
+                client.destroyJob(jobid);
+            });
+        }
+        else {
+            client.endClient();
+        }
     });
 }
 
 
 function onceFailed(method) {
-    printer('', 'The BeanstalkdClient method ' + method +
-        'has failed (please check settings.js that the input is accurate ' +
-        'and that you are not experiencing network issues)'
-    );
-    printer('Please run destroy.js to remove jobs built up in the queue');
+    printer('', 'The BeanstalkdClient method ' + method + ' has stopped');
     client.endClient();
 }
 
-
-printer('Please CTRL + C to stop destroy.js after process has completed');
 client.createClient();
 client
     .on('connected', onceConnected)
+    .on('used', onceUsed)
     .on('watched', onceWatched)
     .on('destroyed', onceWatched)
     .on('failed', onceFailed);
