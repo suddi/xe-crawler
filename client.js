@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter,
-	util_inherit = require('util').inherits;
+    util_inherit = require('util').inherits;
 
 
 var BeanstalkdClient = function() {

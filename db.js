@@ -1,12 +1,12 @@
 var MongoHandler = function() {
-	var util_format		= require('util').format;
-	this.mongoose		= require('mongoose');
+	var util_format = require('util').format;
+	this.mongoose = require('mongoose');
 
-	var db_settings		= require('./settings').mongoose_settings;
-	this.printer		= require('./printer');
+	var db_settings = require('./settings').mongoose_settings;
+	this.printer = require('./printer');
 
 
-	this.mongo_host		= db_settings.host_name;
+	this.mongo_host = db_settings.host_name;
 	this.uri = util_format('mongodb://%s:%s@%s:%d/%s',
 		db_settings.username, db_settings.password,
 		db_settings.host_name, db_settings.port_address,
@@ -14,10 +14,10 @@ var MongoHandler = function() {
 	);
 
 	this.Rates = this.mongoose.model(db_settings.collection, {
-		from:		String,
-		to:			String,
-		created_at:	Date,
-		rate:		String
+		from: String,
+		to: String,
+		created_at: Date,
+		rate: String
 	});
 };
 

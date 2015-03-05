@@ -1,15 +1,15 @@
-var BeanstalkdClient	= require('./client'),
-	Counter				= require('./counter'),
-	ExchangeScraper		= require('./scraper'),
-	MongoHandler		= require('./db'),
-	queue				= require('./settings').queue_settings,
-	printer				= require('./printer');
+var BeanstalkdClient = require('./client'),
+    Counter = require('./counter'),
+    ExchangeScraper = require('./scraper'),
+    MongoHandler = require('./db'),
+    queue = require('./settings').queue_settings,
+    printer = require('./printer');
 
 
-var client	= new BeanstalkdClient();
-var count	= new Counter();
+var client = new BeanstalkdClient();
+var count = new Counter();
 var scraper = new ExchangeScraper();
-var mongo	= new MongoHandler();
+var mongo = new MongoHandler();
 
 var success_counter = {};
 var fail_counter = {};

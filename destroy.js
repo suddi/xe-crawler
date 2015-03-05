@@ -1,5 +1,5 @@
-var BeanstalkdClient	= require('./client'),
-	printer				= require('./printer');
+var BeanstalkdClient = require('./client'),
+    printer = require('./printer');
 
 
 var client = new BeanstalkdClient();

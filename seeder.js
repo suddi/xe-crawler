@@ -1,7 +1,7 @@
-var BeanstalkdClient	= require('./client'),
-	queue				= require('./settings').queue_settings,
-	payloads			= require('./settings').payload_settings,
-	printer				= require('./printer');
+var BeanstalkdClient = require('./client'),
+	queue = require('./settings').queue_settings,
+	payloads = require('./settings').payload_settings,
+	printer = require('./printer');
 
 
 var client = new BeanstalkdClient();
