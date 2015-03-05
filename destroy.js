@@ -1,4 +1,6 @@
-var BeanstalkdClient    = require('./client'),
+var exit                = require('process').exit,
+
+    BeanstalkdClient    = require('./client'),
     queue               = require('./settings').queue_settings,
     printer             = require('./printer');
 
