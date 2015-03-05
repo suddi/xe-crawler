@@ -1,12 +1,12 @@
-var EventEmitter			= require('events').EventEmitter,
-	util_inherit			= require('util').inherits;
+var EventEmitter = require('events').EventEmitter,
+	util_inherit = require('util').inherits;
 
 
 var BeanstalkdClient = function() {
-	var	Fivebeans			= require('fivebeans').client,
+	var Fivebeans = require('fivebeans').client,
 
-		fivebeans_settings	= require('./settings').fivebeans_settings;
-	this.printer			= require('./printer');
+		fivebeans_settings = require('./settings').fivebeans_settings;
+	this.printer = require('./printer');
 
 
 	this.client = new Fivebeans(
