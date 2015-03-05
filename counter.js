@@ -4,6 +4,7 @@ var Counter = function() {
 	this.printer = require('./printer');
 	this.settings = require('./settings').general_settings;
 
+
 	this.pre = this.settings.redis_prefix;
 	this.success = '_success_';
 	this.fail = '_fail_';
