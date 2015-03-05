@@ -5,7 +5,7 @@ var EventEmitter = require('events').EventEmitter,
 var BeanstalkdClient = function() {
 	var Fivebeans = require('fivebeans').client,
 
-		fivebeans_settings = require('./settings').fivebeans_settings;
+        fivebeans_settings = require('./settings').fivebeans_settings;
 	this.printer = require('./printer');
 
 
