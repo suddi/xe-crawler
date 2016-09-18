@@ -1,4 +1,6 @@
-# Documentation #
+# XE Crawler #
+
+[![license](https://img.shields.io/github/license/suddi/xe-crawler.svg?maxAge=2592000)](https://github.com/suddi/xe-crawler/blob/master/LICENSE)
 
 This program was developed on and for `Node.js 0.10.25` on `Ubuntu 14.04 LTS 64 bit`.
 
