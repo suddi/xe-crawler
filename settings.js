@@ -1,19 +1,19 @@
 // Beanstalkd client parameters
 var fivebeans_settings = {
-    host_name:      'challenge.aftership.net',
+    host_name:      'localhost',
     port_address:   11300,
-    tube:           'suddi',
+    tube:           'xe',
 };
 
 
 // MongoDB parameters
 var mongoose_settings = {
-    host_name:      'ds049651.mongolab.com',
-    port_address:   49651,
-    username:       'hal9000',
-    password:       'DuUnoO6rz0WtEbckCX3Wfvx6ABpAWS',
-    database:       'aftership',
-    collection:     'xe_rates',
+    host_name:      'localhost',
+    port_address:   27017,
+    username:       '',
+    password:       '',
+    database:       'xe',
+    collection:     'rates',
 };
 
 
