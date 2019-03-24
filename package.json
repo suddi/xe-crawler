@@ -3,17 +3,17 @@
   "version":          "0.0.1",
   "description":      "My submission to AfterShip's Challenge-3",
   "keywords":         [],
-  "homepage":         "https://github.com/suddi/gdYb52On6UuC7hI_1wzqNQ",
+  "homepage":         "https://github.com/suddi/xe-crawler",
   "bugs": {
-      "url":          "https://github.com/suddi/gdYb52On6UuC7hI_1wzqNQ/issues",
-      "email":        ""
+      "url":          "https://github.com/suddi/xe-crawler/issues",
+      "email":        "mail@suddi.io"
   },
   "license":          "MIT",
   "author":           "Sudharshan Ravindran",
   "main":             "worker.js",
   "repository": {
       "type":         "git",
-      "url":          "https://github.com/suddi/gdYb52On6UuC7hI_1wzqNQ"
+      "url":          "https://github.com/suddi/xe-crawler"
   },
   "private":          true,
   "dependencies": {
@@ -24,7 +24,7 @@
       "jsdom":        "3.1.2",
       "mongoose":     "3.8.24",
       "redis":        "0.12.1",
-      "request":      "2.53.0",
+      "request":      "2.68.0",
       "url":          "0.10.3",
       "util":         "0.10.3"
   }
